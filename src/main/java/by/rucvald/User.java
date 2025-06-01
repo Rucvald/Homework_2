@@ -3,6 +3,7 @@ package by.rucvald;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -34,4 +35,27 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.age = age;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User ) o;
+        return age == user.age &&
+                Objects.equals(userName, user.userName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(dateOfBirth, user.dateOfBirth);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userName, lastName, firstName, dateOfBirth, age);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+
 }

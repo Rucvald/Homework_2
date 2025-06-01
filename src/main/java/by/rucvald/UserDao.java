@@ -1,10 +1,13 @@
 package by.rucvald;
 
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.List;
+
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -80,13 +83,25 @@ public class UserDao {
     public List<User> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             logger.info("Пользователи удалены");
-            return session.createQuery("from User").list();
+            return session.createQuery("from User, User.class").list();
         } catch (HibernateException e) {
             logger.error("Ошибка при поиске пользователей: {}", e.getMessage());
             return null;
         } catch (Exception e) {
             logger.error("Неизвестная ошибка: {}", e.getMessage());
             return null;
+        }
+    }
+
+    public void deleteAll() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.createQuery("DELETE FROM User").executeUpdate();
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            logger.error("Ошибка при удалении всех пользователей: {}", e.getMessage());
+        } catch (Exception e) {
+            logger.error("Неизвестная ошибка: {}", e.getMessage());
         }
     }
 }
